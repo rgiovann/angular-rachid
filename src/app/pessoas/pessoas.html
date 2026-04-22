@@ -11,8 +11,8 @@
     </div>
 
     <div class="table-body">
-      @for (pessoa of pessoas; track pessoa) {
-      <app-pessoa [nome]="pessoa"></app-pessoa>
+      @for (pessoa of pessoas; track pessoa.id) {
+      <app-pessoa [nome]="pessoa.nome"></app-pessoa>
       }
     </div>
 

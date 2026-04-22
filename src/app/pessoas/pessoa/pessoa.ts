@@ -14,4 +14,8 @@ export class Pessoa {
     throw new Error('Method not implemented.');
   }
   @Input() nome = '';
+
+  ngOnChanges() {
+    console.log('INPUT RECEBIDO NO FILHO:', this.nome);
+  }
 }
