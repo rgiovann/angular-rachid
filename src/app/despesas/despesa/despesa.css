@@ -1,0 +1,44 @@
+.despesa-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0.5rem 0.75rem;
+
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.04);
+
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+.despesa-item:hover {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.dados {
+  flex: 1;
+}
+
+.topo {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.meta {
+  color: rgba(0, 0, 0, 0.65);
+  font-size: 0.85rem;
+}
+
+mat-icon {
+  margin: 0;
+}
+
+button[mat-icon-button]:hover {
+  background: rgba(203, 59, 59, 0.3);
+  border-radius: 50%;
+}
+
+button[mat-icon-button] {
+  color: #e88f8f;
+}

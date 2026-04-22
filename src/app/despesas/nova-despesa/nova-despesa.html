@@ -1,0 +1,34 @@
+<div class="mat-mdc-dialog-title dialog-title">Nova Despesa</div>
+
+<div mat-dialog-content class="form-grid">
+  <mat-form-field appearance="fill">
+    <mat-label>Pessoa</mat-label>
+    <mat-select [(ngModel)]="pessoa" name="pessoa">
+      @for (item of pessoas; track item) {
+      <mat-option [value]="item">{{ item }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" floatLabel="always">
+    <mat-label>Descrição</mat-label>
+    <input matInput [(ngModel)]="descricao" name="descricao" />
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Data</mat-label>
+    <input matInput [matDatepicker]="picker" [(ngModel)]="data" name="data" />
+    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Valor</mat-label>
+    <input matInput type="number" [(ngModel)]="valor" name="valor" />
+  </mat-form-field>
+</div>
+
+<div mat-dialog-actions align="end">
+  <button mat-button (click)="fechar()">Cancelar</button>
+  <button mat-flat-button>Confirmar</button>
+</div>

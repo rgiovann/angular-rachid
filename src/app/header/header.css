@@ -1,0 +1,64 @@
+/* Fundo geral escuro */
+.header-wrapper {
+  background: #1a535aaa;
+  padding: 1rem 0;
+}
+
+/* Toolbar (container principal) */
+mat-toolbar.header {
+  user-select: none;
+
+  width: 90%;
+  max-width: 750px;
+  min-height: 160px;
+  margin: 0 auto;
+
+  display: flex;
+  justify-content: center; /* centraliza conteúdo horizontal */
+  align-items: center; /* centraliza vertical */
+
+  padding: 1.5rem;
+
+  border-radius: 12px;
+  background: linear-gradient(to right, #00bcd4, #ff9800);
+
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+/* Container interno (logo + textos) */
+.header-content {
+  display: flex;
+  flex-direction: column; /* empilha verticalmente */
+  align-items: center; /* centraliza tudo */
+  gap: 0.5rem;
+  width: 100%;
+}
+
+/* Logo */
+.logo {
+  width: 84px;
+  height: 84px;
+  object-fit: contain;
+}
+
+/* Bloco de texto */
+.text {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* centraliza os textos também */
+  text-align: center;
+}
+
+/* Título */
+.text h1 {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+/* Subtítulo */
+.text p {
+  margin: 0;
+  font-size: 1.3rem;
+  opacity: 0.95;
+}

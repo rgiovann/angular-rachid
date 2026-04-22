@@ -1,0 +1,20 @@
+<div class="mat-mdc-dialog-title dialog-title">Nova Pessoa</div>
+
+<div mat-dialog-content>
+  <mat-form-field appearance="fill" floatLabel="always" class="full-width">
+    <mat-label>Nome</mat-label>
+    <input matInput [(ngModel)]="nome" />
+  </mat-form-field>
+</div>
+
+<div mat-dialog-actions align="end">
+  <button mat-button (click)="fechar()">
+    <mat-icon>close</mat-icon>
+    Cancelar
+  </button>
+
+  <button mat-flat-button>
+    <mat-icon>check</mat-icon>
+    Confirmar
+  </button>
+</div>

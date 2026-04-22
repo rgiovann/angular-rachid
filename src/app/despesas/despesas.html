@@ -1,0 +1,19 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Despesas</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    @for (despesa of despesas; track $index) {
+    <app-despesa [pessoa]="despesa.pessoa" [descricao]="despesa.descricao" [valor]="despesa.valor"
+      [data]="despesa.data"></app-despesa>
+    }
+  </mat-card-content>
+
+  <mat-card-actions align="end">
+    <button mat-flat-button (click)="abrirDialogNovaDespesa()">
+      <mat-icon>add</mat-icon>
+      Adicionar Despesa
+    </button>
+  </mat-card-actions>
+</mat-card>
