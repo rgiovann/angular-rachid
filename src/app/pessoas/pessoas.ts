@@ -8,6 +8,7 @@ import { NovaPessoa } from './nova-pessoa/nova-pessoa';
 import { Pessoa as PessoaModel } from './pessoa.model';
 import { DialogAviso } from '../shared/dialog-aviso/dialog-aviso';
 import { PessoasService } from './pessoas.service';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-pessoas',
@@ -16,15 +17,18 @@ import { PessoasService } from './pessoas.service';
   styleUrl: './pessoas.css',
   standalone: true,
 })
-export class Pessoas {
+export class Pessoas implements OnInit {
+  pessoas: PessoaModel[] = [];
+
   constructor(
     private readonly dialog: MatDialog,
     private readonly pessoasService: PessoasService,
-    private readonly ngZone: NgZone,
+    //private readonly ngZone: NgZone,
+    private readonly cdr: ChangeDetectorRef,
   ) {}
 
-  get pessoas(): PessoaModel[] {
-    return this.pessoasService.getAll();
+  ngOnInit(): void {
+    this.pessoas = this.pessoasService.getAll();
   }
 
   abrirDialogNovaPessoa(): void {
@@ -35,13 +39,20 @@ export class Pessoas {
     dialogRef.afterClosed().subscribe((nome: string | undefined) => {
       if (!nome) return;
 
-      const resultado = this.pessoasService.add(nome);
+      setTimeout(() => {
+        const resultado = this.pessoasService.add(nome);
 
-      if (!resultado.sucesso) {
-        this.dialog.open(DialogAviso, {
-          data: resultado.erro,
-        });
-      }
+        if (!resultado.sucesso) {
+          this.dialog.open(DialogAviso, {
+            data: resultado.erro,
+          });
+          return;
+        }
+
+        this.pessoas = this.pessoasService.getAll();
+
+        this.cdr.detectChanges();
+      });
     });
   }
 

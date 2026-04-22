@@ -13,7 +13,7 @@ export class Pessoa {
   removerPessoa() {
     throw new Error('Method not implemented.');
   }
-  @Input() nome = '';
+  @Input({ required: true }) nome!: string;
 
   ngOnChanges() {
     console.log('INPUT RECEBIDO NO FILHO:', this.nome);
