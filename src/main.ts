@@ -4,9 +4,10 @@ import { App } from './app/app';
 import { registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt';
 import { LOCALE_ID } from '@angular/core';
+import { provideNativeDateAdapter } from '@angular/material/core';
 
 registerLocaleData(localePt);
 
 bootstrapApplication(App, {
-  providers: [{ provide: LOCALE_ID, useValue: 'pt-BR' }],
+  providers: [{ provide: LOCALE_ID, useValue: 'pt-BR' }, provideNativeDateAdapter()],
 }).catch((err) => console.error(err));
