@@ -6,3 +6,17 @@
   font-size: 1rem;
   font-weight: 600;
 }
+.erro {
+  color: #d32f2f;
+  margin-top: 8px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.invisivel {
+  visibility: hidden;
+}
+
+.mat-mdc-form-field-subscript-wrapper {
+  min-height: 20px;
+}

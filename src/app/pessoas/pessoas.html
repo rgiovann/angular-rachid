@@ -11,8 +11,9 @@
     </div>
 
     <div class="table-body">
-      @for (pessoa of pessoas; track pessoa.id) {
-      <app-pessoa [nome]="pessoa.nome"></app-pessoa>
+      @for (pessoa of pessoas$ | async; track pessoa.id) {
+      <app-pessoa [pessoa]="pessoa" (remover)="removerPessoa($event)">
+      </app-pessoa>
       }
     </div>
 

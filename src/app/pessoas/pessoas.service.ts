@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 import { Pessoa } from './pessoa.model';
 
 @Injectable({
@@ -7,15 +8,11 @@ import { Pessoa } from './pessoa.model';
 export class PessoasService {
   private readonly STORAGE_KEY = 'pessoas';
 
-  private pessoas: Pessoa[] = [];
+  private readonly pessoasSubject = new BehaviorSubject<Pessoa[]>([]);
+  readonly pessoas$ = this.pessoasSubject.asObservable();
 
   constructor() {
-    console.log('SERVICE INSTANCE', this);
     this.load();
-  }
-
-  getAll(): Pessoa[] {
-    return [...this.pessoas];
   }
 
   add(nome: string): { sucesso: boolean; erro?: string } {
@@ -25,10 +22,12 @@ export class PessoasService {
       return { sucesso: false, erro: 'Nome inválido' };
     }
 
-    const existe = this.pessoas.some((p) => p.nome.toLowerCase() === nomeNormalizado.toLowerCase());
+    const atual = this.pessoasSubject.value;
+
+    const existe = atual.some((p) => p.nome.toLowerCase() === nomeNormalizado.toLowerCase());
 
     if (existe) {
-      return { sucesso: false, erro: 'Pessoa já existe' };
+      return { sucesso: false, erro: 'Pessoa já existe!' };
     }
 
     const novaPessoa: Pessoa = {
@@ -36,18 +35,30 @@ export class PessoasService {
       nome: nomeNormalizado,
     };
 
-    this.pessoas = [...this.pessoas, novaPessoa];
-    this.save();
+    const novaLista = [...atual, novaPessoa];
+
+    this.pessoasSubject.next(novaLista);
+    this.save(novaLista);
 
     return { sucesso: true };
   }
 
   private load(): void {
     const data = localStorage.getItem(this.STORAGE_KEY);
-    this.pessoas = data ? JSON.parse(data) : [];
+    const lista = data ? JSON.parse(data) : [];
+    this.pessoasSubject.next(lista);
   }
 
-  private save(): void {
-    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.pessoas));
+  private save(lista: Pessoa[]): void {
+    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(lista));
+  }
+
+  remove(id: string): void {
+    const atual = this.pessoasSubject.value;
+
+    const novaLista = atual.filter((p) => p.id !== id);
+
+    this.pessoasSubject.next(novaLista);
+    this.save(novaLista);
   }
 }

@@ -1,6 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { type Pessoa as PessoaModel } from '../pessoa.model';
 
 @Component({
   selector: 'app-pessoa',
@@ -10,12 +11,10 @@ import { MatIconModule } from '@angular/material/icon';
   standalone: true,
 })
 export class Pessoa {
-  removerPessoa() {
-    throw new Error('Method not implemented.');
-  }
-  @Input({ required: true }) nome!: string;
+  @Input({ required: true }) pessoa!: PessoaModel;
+  @Output() remover = new EventEmitter<PessoaModel>();
 
-  ngOnChanges() {
-    console.log('INPUT RECEBIDO NO FILHO:', this.nome);
+  removerPessoa() {
+    this.remover.emit(this.pessoa);
   }
 }

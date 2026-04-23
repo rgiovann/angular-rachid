@@ -3,7 +3,14 @@
 <div mat-dialog-content>
   <mat-form-field appearance="fill" floatLabel="always" class="full-width">
     <mat-label>Nome</mat-label>
-    <input matInput [(ngModel)]="nome" />
+
+    <input matInput [formControl]="nomeControl" />
+
+    @if (nomeControl.hasError('required') && nomeControl.touched) {
+    <mat-error>Nome é obrigatório</mat-error>
+    } @else if (nomeControl.hasError('duplicado')) {
+    <mat-error>Pessoa já existe!</mat-error>
+    }
   </mat-form-field>
 </div>
 

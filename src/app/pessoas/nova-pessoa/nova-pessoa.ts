@@ -1,33 +1,38 @@
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef, MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIcon } from '@angular/material/icon';
+import { PessoasService } from '../pessoas.service';
+import { ReactiveFormsModule, FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-nova-pessoa',
   imports: [
-    FormsModule,
     MatDialogModule,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
     MatIcon,
+    ReactiveFormsModule,
   ],
   templateUrl: './nova-pessoa.html',
   styleUrl: './nova-pessoa.css',
   standalone: true,
 })
 export class NovaPessoa {
-  nome = '';
+  nomeControl = new FormControl('', {
+    nonNullable: true,
+    validators: [Validators.required],
+  });
 
   private readonly STORAGE_KEY = 'pessoas';
 
   constructor(
     private readonly dialogRef: MatDialogRef<NovaPessoa>,
     private readonly dialog: MatDialog,
+    private readonly pessoasService: PessoasService,
   ) {}
 
   fechar(): void {
@@ -35,10 +40,20 @@ export class NovaPessoa {
   }
 
   confirmar(): void {
-    const nome = this.nome.trim();
-    if (!nome) return;
+    if (this.nomeControl.invalid) {
+      this.nomeControl.markAsTouched();
+      return;
+    }
 
-    // 👇 só retorna dado
-    this.dialogRef.close(nome);
+    const nome = this.nomeControl.value;
+
+    const resultado = this.pessoasService.add(nome);
+
+    if (!resultado.sucesso) {
+      this.nomeControl.setErrors({ duplicado: true });
+      return;
+    }
+
+    this.dialogRef.close(true);
   }
 }
