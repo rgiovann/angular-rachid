@@ -7,22 +7,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { PessoasService } from './pessoas/pessoas.service';
 import { DespesasService } from './despesas/despesas.service';
 import { DialogConfirmacao } from './shared/dialog-confirmacao/dialog.confirmacao';
-import { MatCard, MatCardHeader, MatCardTitle, MatCardContent } from '@angular/material/card';
 import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-root',
-  imports: [
-    Header,
-    Pessoas,
-    Despesas,
-    Rateio,
-    MatCard,
-    MatCardHeader,
-    MatCardTitle,
-    MatCardContent,
-    MatIcon,
-  ],
+  imports: [Header, Pessoas, Despesas, MatIcon],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
