@@ -4,11 +4,9 @@ body {
   background: hsl(189, 36%, 53%);
 }
 
-.cdk-overlay-backdrop.cdk-overlay-backdrop-showing {
-  background: rgba(0, 0, 0, 0.6); /* mais escuro */
-}
 /* You can add global styles to this file, and also import other style files */
-
-button[mat-flat-button]:hover {
-  background-color: rgba(12, 175, 184, 0.216);
+@media (hover: hover) and (pointer: fine) {
+  button[mat-flat-button]:hover {
+    background-color: rgba(12, 175, 184, 0.25);
+  }
 }
