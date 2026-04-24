@@ -4,9 +4,10 @@
   </mat-card-header>
 
   <mat-card-content>
-    @for (despesa of despesas; track $index) {
-    <app-despesa [pessoa]="despesa.pessoa" [descricao]="despesa.descricao" [valor]="despesa.valor"
-      [data]="despesa.data"></app-despesa>
+    @for (despesa of despesas$ | async; track despesa.id) {
+    <app-despesa [id]="despesa.id" [pessoa]="despesa.pessoaNome" [descricao]="despesa.descricao" [valor]="despesa.valor"
+      [data]="despesa.data" (remover)="removerDespesa($event)">
+    </app-despesa>
     }
   </mat-card-content>
 

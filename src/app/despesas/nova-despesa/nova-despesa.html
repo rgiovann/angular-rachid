@@ -1,34 +1,70 @@
 <div class="mat-mdc-dialog-title dialog-title">Nova Despesa</div>
 
-<div mat-dialog-content class="form-grid">
-  <mat-form-field appearance="fill">
+<div mat-dialog-content class="form-grid" [formGroup]="form">
+
+  <!-- Pessoa -->
+  <mat-form-field appearance="fill" floatLabel="always">
     <mat-label>Pessoa</mat-label>
-    <mat-select [(ngModel)]="pessoa" name="pessoa">
-      @for (item of pessoas; track item) {
-      <mat-option [value]="item">{{ item }}</mat-option>
+
+    <mat-select formControlName="pessoaId">
+      @for (p of pessoas; track p.id) {
+      <mat-option [value]="p.id">{{ p.nome }}</mat-option>
       }
     </mat-select>
+
+    @if (form.get('pessoaId')?.hasError('required') && form.get('pessoaId')?.touched) {
+    <mat-error>Pessoa é obrigatória</mat-error>
+    }
   </mat-form-field>
 
+  <!-- Descrição -->
   <mat-form-field appearance="fill" floatLabel="always">
     <mat-label>Descrição</mat-label>
-    <input matInput [(ngModel)]="descricao" name="descricao" />
+
+    <input matInput formControlName="descricao" />
+
+    @if (form.get('descricao')?.hasError('required') && form.get('descricao')?.touched) {
+    <mat-error>Descrição é obrigatória</mat-error>
+    }
   </mat-form-field>
 
+  <!-- Data -->
   <mat-form-field appearance="fill">
     <mat-label>Data</mat-label>
-    <input matInput [matDatepicker]="picker" [(ngModel)]="data" name="data" />
+
+    <input matInput [matDatepicker]="picker" formControlName="data" />
     <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
     <mat-datepicker #picker></mat-datepicker>
+
+    @if (form.get('data')?.hasError('required') && form.get('data')?.touched) {
+    <mat-error>Data é obrigatória</mat-error>
+    }
   </mat-form-field>
 
-  <mat-form-field appearance="fill">
+  <!-- Valor -->
+  <mat-form-field appearance="fill" floatLabel="always">
     <mat-label>Valor</mat-label>
-    <input matInput type="number" [(ngModel)]="valor" name="valor" />
+
+    <input matInput type="number" formControlName="valor" />
+
+    @if (form.get('valor')?.hasError('required') && form.get('valor')?.touched) {
+    <mat-error>Valor é obrigatório</mat-error>
+    }
+    @else if (form.get('valor')?.hasError('min')) {
+    <mat-error>Valor deve ser maior que zero</mat-error>
+    }
   </mat-form-field>
+
 </div>
 
 <div mat-dialog-actions align="end">
-  <button mat-button (click)="fechar()">Cancelar</button>
-  <button mat-flat-button>Confirmar</button>
+  <button mat-button (click)="fechar()">
+    <mat-icon>close</mat-icon>
+    Cancelar
+  </button>
+
+  <button mat-flat-button (click)="confirmar()">
+    <mat-icon>check</mat-icon>
+    Confirmar
+  </button>
 </div>

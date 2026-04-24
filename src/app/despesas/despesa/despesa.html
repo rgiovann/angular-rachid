@@ -2,13 +2,14 @@
   <div class="dados">
     <div class="topo">
       <strong>{{ descricao }}</strong>
-      <span>{{ valor | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</span>
+      <span>{{ valor | currency: 'BRL':'symbol':'1.2-2':'pt-BR' }}</span>
     </div>
-    <div class="meta">{{ pessoa }} • {{ data | date: 'dd/MM/yyyy' }}</div>
+    <div class="meta">
+      {{ pessoa }} • {{ data | date: 'dd/MM/yyyy' }}
+    </div>
   </div>
 
   <button mat-icon-button (click)="removerDespesa()">
     <mat-icon>remove_circle_outline</mat-icon>
   </button>
-
 </div>

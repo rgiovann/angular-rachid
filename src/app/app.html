@@ -1,5 +1,22 @@
-<app-header></app-header>
+<div class="header-wrapper">
+  <div class="header-container">
+    <app-header>
+      <div header-actions class="floating-actions">
 
+        <button mat-flat-button class="btn-rateio" (click)="abrirRateio()" [disabled]="!podeCalcular">
+          <mat-icon>pie_chart</mat-icon>
+          Rateio
+        </button>
+
+        <button mat-flat-button class="btn-limpar" (click)="limparTudo()">
+          <mat-icon>delete</mat-icon>
+          Limpar
+        </button>
+
+      </div>
+    </app-header>
+  </div>
+</div>
 <main class="page-content">
   <div class="content-grid">
     <section>
@@ -9,9 +26,5 @@
     <section>
       <app-despesas></app-despesas>
     </section>
-  </div>
-
-  <div class="rateio-area">
-    <app-rateio></app-rateio>
   </div>
 </main>

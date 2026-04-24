@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Pessoa } from './pessoa.model';
+import { DespesasService } from '../despesas/despesas.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +12,7 @@ export class PessoasService {
   private readonly pessoasSubject = new BehaviorSubject<Pessoa[]>([]);
   readonly pessoas$ = this.pessoasSubject.asObservable();
 
-  constructor() {
+  constructor(private readonly despesasService: DespesasService) {
     this.load();
   }
 
@@ -60,5 +61,21 @@ export class PessoasService {
 
     this.pessoasSubject.next(novaLista);
     this.save(novaLista);
+
+    // 🔥 CASCADE DELETE
+    this.despesasService.removeByPessoaId(id);
+  }
+
+  temPessoas(): boolean {
+    return this.pessoasSubject.value.length > 0;
+  }
+
+  clear(): void {
+    this.pessoasSubject.next([]);
+    localStorage.removeItem(this.STORAGE_KEY);
+  }
+
+  get snapshot(): Pessoa[] {
+    return this.pessoasSubject.value;
   }
 }

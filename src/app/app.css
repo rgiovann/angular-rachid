@@ -1,3 +1,76 @@
+/* ===== TOPO (HEADER + BOTÕES) ===== */
+.top-area {
+  display: flex;
+  justify-content: center; /* mantém header centralizado */
+  align-items: center;
+  position: relative;
+
+  width: 100%;
+}
+
+.header-container {
+  display: flex;
+  justify-content: center;
+}
+
+.header-wrapper {
+  position: relative;
+
+  left: 50%;
+  right: 50%;
+
+  margin-left: -50vw;
+  margin-right: -50vw;
+
+  width: 100vw;
+
+  background: #1a535aaa;
+  padding: 1rem 0;
+}
+
+app-header {
+  width: 100%;
+  max-width: 750px;
+}
+.floating-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.floating-actions button {
+  height: 40px;
+  min-width: 140px;
+
+  border-radius: 20px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  gap: 8px;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.btn-rateio {
+  background: #0097a7;
+  color: white;
+}
+
+.btn-limpar {
+  background: #fb8c00;
+  color: white;
+}
+
+.floating-actions button:hover {
+  filter: brightness(1.05);
+}
+
+/* ===== CONTEÚDO ===== */
 .page-content {
   width: min(1100px, calc(100% - 2rem));
   margin: 2rem auto;
@@ -8,12 +81,6 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem;
   align-items: start;
-}
-
-.rateio-area {
-  margin-top: 1.5rem;
-  display: flex;
-  justify-content: center;
 }
 
 @media (max-width: 840px) {

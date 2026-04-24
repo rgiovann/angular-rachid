@@ -1,21 +1,35 @@
-import { Component, Input } from '@angular/core';
-import { CurrencyPipe, DatePipe } from '@angular/common';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { CurrencyPipe, DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-despesa',
+  standalone: true,
   imports: [MatButtonModule, MatIconModule, CurrencyPipe, DatePipe],
   templateUrl: './despesa.html',
   styleUrl: './despesa.css',
-  standalone: true,
 })
 export class Despesa {
-  removerDespesa() {
-    throw new Error('Method not implemented.');
+  @Input({ required: true }) id!: string;
+  @Input({ required: true }) pessoa!: string;
+  @Input({ required: true }) descricao!: string;
+  @Input({ required: true }) valor!: number;
+  @Input({ required: true }) data!: string;
+
+  @Output() remover = new EventEmitter<{
+    id: string;
+    pessoa: string;
+    descricao: string;
+    valor: number;
+  }>();
+
+  removerDespesa(): void {
+    this.remover.emit({
+      id: this.id,
+      pessoa: this.pessoa,
+      descricao: this.descricao,
+      valor: this.valor,
+    });
   }
-  @Input() pessoa = '';
-  @Input() descricao = '';
-  @Input() valor = 0;
-  @Input() data = '';
 }
