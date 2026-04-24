@@ -6,6 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIcon } from '@angular/material/icon';
 import { PessoasService } from '../pessoas.service';
 import { ReactiveFormsModule, FormControl, Validators } from '@angular/forms';
+import { PreventBlurDirective } from '../../shared/directives/prevent-blur.directive';
 
 @Component({
   selector: 'app-nova-pessoa',
@@ -16,6 +17,7 @@ import { ReactiveFormsModule, FormControl, Validators } from '@angular/forms';
     MatButtonModule,
     MatIcon,
     ReactiveFormsModule,
+    PreventBlurDirective,
   ],
   templateUrl: './nova-pessoa.html',
   styleUrl: './nova-pessoa.css',
@@ -27,7 +29,7 @@ export class NovaPessoa {
     validators: [Validators.required],
   });
 
-  private readonly STORAGE_KEY = 'pessoas';
+  submetido: boolean = false;
 
   constructor(
     private readonly dialogRef: MatDialogRef<NovaPessoa>,
@@ -40,6 +42,8 @@ export class NovaPessoa {
   }
 
   confirmar(): void {
+    this.submetido = true;
+
     if (this.nomeControl.invalid) {
       this.nomeControl.markAsTouched();
       return;

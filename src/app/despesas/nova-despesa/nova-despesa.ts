@@ -9,6 +9,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { PreventBlurDirective } from '../../shared/directives/prevent-blur.directive';
 
 import { PessoasService } from '../../pessoas/pessoas.service';
 import { DespesasService } from '../despesas.service';
@@ -27,13 +28,14 @@ import { type Pessoa } from '../../pessoas/pessoa.model';
     MatSelectModule,
     MatButtonModule,
     MatIconModule,
+    PreventBlurDirective,
   ],
   templateUrl: './nova-despesa.html',
   styleUrl: './nova-despesa.css',
 })
 export class NovaDespesa {
   pessoas: Pessoa[] = [];
-
+  submetido: boolean = false;
   form = new FormGroup({
     pessoaId: new FormControl<string | null>(null, Validators.required),
     descricao: new FormControl('', {
@@ -60,6 +62,7 @@ export class NovaDespesa {
   }
 
   confirmar(): void {
+    this.submetido = true;
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;

@@ -12,7 +12,7 @@
       }
     </mat-select>
 
-    @if (form.get('pessoaId')?.hasError('required') && form.get('pessoaId')?.touched) {
+    @if (form.get('pessoaId')?.hasError('required') && form.get('pessoaId')?.touched && submetido) {
     <mat-error>Pessoa é obrigatória</mat-error>
     }
   </mat-form-field>
@@ -58,7 +58,7 @@
 </div>
 
 <div mat-dialog-actions align="end">
-  <button mat-button (click)="fechar()">
+  <button mat-button appPreventBlur (click)="fechar()">
     <mat-icon>close</mat-icon>
     Cancelar
   </button>
