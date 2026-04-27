@@ -1,13 +1,14 @@
 import { Component, signal } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { MatIcon } from '@angular/material/icon';
+import { Despesas } from './despesas/despesas';
+import { DespesasService } from './despesas/despesas.service';
 import { Header } from './header/header';
 import { Pessoas } from './pessoas/pessoas';
-import { Despesas } from './despesas/despesas';
-import { Rateio } from './rateio/rateio';
-import { MatDialog } from '@angular/material/dialog';
 import { PessoasService } from './pessoas/pessoas.service';
-import { DespesasService } from './despesas/despesas.service';
+import { RateioService } from './rateio/rateio.service';
+import { ResultadoRateio } from './resultado-rateio/resultado-rateio';
 import { DialogConfirmacao } from './shared/dialog-confirmacao/dialog.confirmacao';
-import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-root',
@@ -22,17 +23,23 @@ export class App {
     private readonly dialog: MatDialog,
     private readonly pessoasService: PessoasService,
     private readonly despesasService: DespesasService,
+    private readonly rateioService: RateioService,
   ) {}
 
-  // 🔷 controle de estado mínimo para UX
   get podeCalcular(): boolean {
     return this.pessoasService.temPessoas() && this.despesasService.temDespesas();
   }
 
-  // 🔷 abre dialog de resultado
   abrirRateio(): void {
-    this.dialog.open(Rateio, {
-      width: '600px',
+    const resultado = this.rateioService.calcular(
+      this.pessoasService.snapshot,
+      this.despesasService.snapshot,
+    );
+
+    this.dialog.open(ResultadoRateio, {
+      width: 'min(600px, calc(100vw - 1rem))',
+      maxWidth: 'calc(100vw - 1rem)',
+      data: resultado,
     });
   }
 

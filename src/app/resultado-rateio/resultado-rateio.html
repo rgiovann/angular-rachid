@@ -1,1 +1,66 @@
+<h2 mat-dialog-title class="dialog-title">Resultado do Rateio</h2>
 
+<div mat-dialog-content class="dialog-content">
+  <section class="resumo">
+    <div class="resumo-item">
+      <span class="resumo-label">Total das despesas</span>
+      <strong class="resumo-valor">{{
+        viewModel.resumo.totalGasto | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
+      }}</strong>
+    </div>
+
+    <div class="resumo-item">
+      <span class="resumo-label">Valor por pessoa</span>
+      <strong class="resumo-valor">{{
+        viewModel.resumo.valorPorPessoa | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
+      }}</strong>
+    </div>
+  </section>
+
+  <section class="pessoas-lista">
+    @for (pessoa of viewModel.pessoas; track pessoa.pessoaId) {
+      <article class="pessoa-card">
+        <h3 class="pessoa-nome">{{ pessoa.pessoaNome }}</h3>
+
+        <p class="saldo-linha">
+          <span class="saldo-label">SALDO:</span>
+          <span
+            class="saldo-valor"
+            [class.saldo-positivo]="pessoa.saldo > 0"
+            [class.saldo-negativo]="pessoa.saldo < 0"
+          >
+            {{ pessoa.saldo | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
+          </span>
+        </p>
+
+        @if (pessoa.estaQuite) {
+          <p class="quite-texto">Esta quite</p>
+        } @else {
+          <div class="movimentos-lista">
+            @for (movimento of pessoa.movimentos; track $index) {
+              <p class="movimento-linha">
+                <span
+                  class="movimento-tipo"
+                  [class.movimento-deve]="movimento.tipo === 'deve'"
+                  [class.movimento-recebe]="movimento.tipo === 'recebe'"
+                >
+                  {{ movimento.tipo === 'deve' ? 'DEVE' : 'RECEBE' }}
+                </span>
+
+                <span class="movimento-texto">
+                  {{ movimento.valor | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
+                  {{ movimento.tipo === 'deve' ? 'para' : 'de' }}
+                  {{ movimento.contraparteNome }}
+                </span>
+              </p>
+            }
+          </div>
+        }
+      </article>
+    }
+  </section>
+</div>
+
+<div mat-dialog-actions align="end">
+  <button mat-flat-button mat-dialog-close>OK</button>
+</div>
