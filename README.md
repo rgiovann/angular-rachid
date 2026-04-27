@@ -2,214 +2,159 @@
 
 Aplicacao web em Angular para calcular quanto cada pessoa deve pagar ou receber em um rateio entre amigos.
 
-O cenario que o sistema resolve e o seguinte: ao longo de uma viagem, encontro ou evento, os pagamentos nao sao feitos pela mesma pessoa. Mesmo assim, no fim, o valor total precisa ser dividido igualmente entre todos os participantes. O objetivo do app e organizar essas informacoes e facilitar o acerto entre as partes.
+O problema que o sistema resolve e simples de entender, mas muito comum na vida real: varias pessoas participam de uma viagem, encontro ou evento, os pagamentos sao feitos por pessoas diferentes, e no final o valor total precisa ser dividido igualmente entre todos.
 
-Este projeto esta em desenvolvimento (`work in progress`) e ja possui uma base moderna em Angular, com interface em Angular Material, persistencia local e fluxo reativo para cadastro e consolidacao dos dados.
+O objetivo do app e registrar essas informacoes, consolidar os gastos e mostrar com clareza:
 
-## Objetivo do sistema
+- quanto foi gasto ao todo;
+- quanto cada pessoa deveria pagar;
+- quem ficou com saldo positivo ou negativo;
+- quem deve pagar para quem.
 
-O sistema foi pensado para registrar:
+## Demo
 
-- as pessoas que participam do rateio;
-- as despesas pagas ao longo do periodo;
-- quem pagou cada despesa;
-- o valor total desembolsado por cada participante;
-- o saldo final necessario para equilibrar a divisao em partes iguais.
+A aplicacao publicada pode ser acessada em:
 
-Exemplo simples:
-
-1. Ana, Bruno e Carla participam de uma viagem.
-2. Ana paga `R$ 90`, Bruno paga `R$ 30` e Carla nao paga nada.
-3. O total gasto e `R$ 120`.
-4. Como sao 3 pessoas, cada uma deveria arcar com `R$ 40`.
-5. Resultado:
-- Ana pagou `R$ 50` a mais.
-- Bruno pagou `R$ 10` a menos.
-- Carla pagou `R$ 40` a menos.
-
-A partir disso, o sistema pode indicar quem deve receber e quem precisa complementar o valor para que o rateio fique justo.
+- [GitHub Pages - Rachid](https://rgiovann.github.io/angular-rachid/)
 
 ## Status atual
 
-No estado atual, o projeto ja oferece:
+Hoje o projeto ja entrega um fluxo funcional de ponta a ponta:
 
 - cadastro de pessoas;
 - cadastro de despesas com descricao, data, valor e responsavel;
 - remocao de pessoas e despesas;
 - exclusao em cascata das despesas quando uma pessoa e removida;
-- armazenamento local no navegador com `localStorage`;
+- persistencia local com `localStorage`;
 - validacoes basicas de formulario;
 - dialogs de confirmacao e aviso;
-- base pronta para exibir o resultado do rateio em uma etapa seguinte.
+- calculo completo do rateio;
+- exibicao do resultado consolidado em dialog dedicado;
+- suporte visual refinado para telas desktop e mobile;
+- testes automatizados para a regra principal do algoritmo.
 
-As telas de `Rateio` e `ResultadoRateio` ja existem como estrutura inicial, mas a logica final de conciliacao ainda esta em evolucao.
+## Exemplo de uso
 
-## Angular moderno utilizado neste projeto
+Considere 3 pessoas:
 
-Este projeto ja aplica varias praticas e APIs modernas do ecossistema Angular:
+- Antonio
+- Jose
+- Mario
 
-### 1. Standalone Components
+Pagamentos realizados:
 
-A aplicacao foi montada sem `NgModules` tradicionais para os componentes da interface.
+- Antonio pagou `R$ 170,00`
+- Jose pagou `R$ 75,00`
+- Jose pagou `R$ 25,00`
 
-Exemplos no projeto:
+Total gasto:
 
-- `App`
-- `Header`
-- `Pessoas`
-- `Despesas`
-- `NovaPessoa`
-- `NovaDespesa`
-- `DialogConfirmacao`
-- `DialogAviso`
+- `R$ 270,00`
 
-Beneficios:
+Valor por pessoa:
 
-- menor boilerplate;
-- imports mais explicitos por componente;
-- estrutura mais simples para evoluir e manter;
-- alinhamento com o modelo recomendado nas versoes mais recentes do Angular.
+- `R$ 90,00`
 
-### 2. Bootstrap moderno com `bootstrapApplication`
+Resultado esperado:
 
-O ponto de entrada usa `bootstrapApplication` em vez do modelo classico baseado em `AppModule`.
+- Jose deve `R$ 23,33` para Antonio
+- Mario deve `R$ 56,67` para Antonio
+- Mario deve `R$ 33,33` para Jose
 
-Isso deixa a inicializacao mais enxuta e combina com a abordagem standalone da aplicacao.
+Esse e um dos cenarios usados para validar o algoritmo no projeto.
 
-Tambem sao configurados no bootstrap:
+## Como o resultado e apresentado
 
-- `LOCALE_ID` com `pt-BR`;
-- `registerLocaleData` para formatacao localizada;
-- `provideNativeDateAdapter()` para integrar o datepicker do Angular Material.
+Ao clicar no botao `Rateio`, o sistema:
 
-### 3. Estrutura pronta para configuracao moderna de providers
+1. consolida todas as despesas cadastradas;
+2. calcula a cota igual por participante;
+3. identifica o saldo individual de cada pessoa;
+4. reduz os cruzamentos de debito/credito para chegar nas transferencias finais;
+5. exibe um relatorio visual com:
+- total das despesas;
+- valor por pessoa;
+- saldo de cada participante;
+- linhas do tipo `DEVE ... para ...` e `RECEBE ... de ...`;
+- indicacao de `Esta quite` quando nao houver movimentacoes pendentes.
 
-O projeto ja possui um arquivo `ApplicationConfig` com preparacao para providers globais, incluindo:
+## Arquitetura da feature de rateio
 
-- `provideRouter(routes)`;
-- `provideBrowserGlobalErrorListeners()`.
+O projeto segue uma separacao simples e saudavel entre regra de negocio e interface:
 
-No estado atual, o bootstrap principal ainda registra providers diretamente na inicializacao da aplicacao, mas a base para evoluir essa configuracao de forma centralizada ja existe no codigo.
+- `src/app/rateio/rateio.service.ts`
+  Calcula o rateio com base nas pessoas e despesas cadastradas.
 
-### 4. Novo controle de fluxo no template com `@for`
+- `src/app/rateio/rateio.model.ts`
+  Define os contratos de dados usados como saida do calculo.
 
-As listas de pessoas e despesas usam a sintaxe moderna de templates do Angular:
+- `src/app/resultado-rateio/`
+  Contem o componente responsavel por transformar o resultado em um relatorio visual para o usuario.
 
-- `@for (...; track ...)`
+- `src/app/app.ts`
+  Orquestra o clique do botao `Rateio`, chama o servico e abre o dialog de resultado.
 
-Isso substitui a abordagem antiga com `*ngFor` e deixa o template mais consistente com a nova geracao do framework.
+Essa estrutura evita misturar calculo financeiro com renderizacao e facilita manutencao, testes e evolucao futura.
 
-Beneficios:
+## Logica de calculo
 
-- sintaxe mais moderna e legivel;
-- melhor controle de rastreamento com `track`;
-- alinhamento com os recursos recentes da template syntax do Angular.
+O algoritmo implementado em TypeScript foi portado a partir de uma versao previamente validada em Java.
 
-### 5. Forms reativos com tipagem
+De forma resumida, ele funciona assim:
 
-Os dialogs de cadastro usam `ReactiveFormsModule` com `FormControl` e `FormGroup`.
+1. soma todos os pagamentos feitos;
+2. calcula quanto cada pessoa deveria pagar igualmente;
+3. registra, para cada despesa, quanto cada uma das outras pessoas deve ao pagador;
+4. consolida relacoes reciprocas entre pares de pessoas;
+5. elimina residuos numericos irrelevantes com tolerancia para ponto flutuante;
+6. devolve:
+- total gasto;
+- valor por pessoa;
+- saldos individuais;
+- transferencias finais entre devedores e credores.
 
-Exemplos presentes:
+## Angular moderno utilizado no projeto
 
-- validacao de campo obrigatorio;
-- validacao de valor minimo;
-- `nonNullable` em campos textuais;
-- `markAsTouched()` e `markAllAsTouched()` para feedback de erro;
-- leitura tipada com `getRawValue()`.
+Este projeto aplica varias praticas atuais do ecossistema Angular:
 
-Isso melhora a previsibilidade da logica de formulario e reduz erros em tempo de desenvolvimento.
+- standalone components;
+- `bootstrapApplication`;
+- `signal()` no componente raiz;
+- templates com `@for` e `@if`;
+- formularios reativos tipados;
+- integracao com Angular Material;
+- `AsyncPipe`;
+- pipes importados diretamente nos componentes;
+- diretiva standalone customizada;
+- uso de RxJS com `BehaviorSubject`, `Observable`, `combineLatest` e `map`.
 
-### 6. Integracao com Angular Material
+## Recursos de UI/UX implementados
 
-O projeto usa Angular Material como base da experiencia visual e dos componentes interativos.
+Ao longo da construcao, a interface passou por refinamentos importantes:
 
-Componentes utilizados:
-
-- `MatCard`
-- `MatButton`
-- `MatIcon`
-- `MatDialog`
-- `MatFormField`
-- `MatInput`
-- `MatDatepicker`
-- `MatSelect`
-- `MatToolbar`
-
-Com isso, a aplicacao ganha:
-
-- padronizacao visual;
-- acessibilidade melhor que componentes feitos do zero;
-- produtividade maior na construcao das telas;
-- uma base pronta para evoluir a UX sem reinventar componentes estruturais.
-
-### 7. Fluxo reativo com RxJS
-
-Os dados principais do sistema sao mantidos de forma reativa usando:
-
-- `BehaviorSubject`
-- `Observable`
-- `combineLatest`
-- `map`
-
-Como isso aparece no projeto:
-
-- `PessoasService` expoe `pessoas$`;
-- `DespesasService` expoe `despesas$`;
-- a tela de despesas combina pessoas e despesas para montar uma view model pronta para exibicao.
-
-Esse modelo ajuda a manter a interface sincronizada com o estado sem precisar de atualizacoes manuais espalhadas pela aplicacao.
-
-### 8. Uso de `AsyncPipe`
-
-Os componentes de listagem consomem streams diretamente no template com `AsyncPipe`.
-
-Beneficios:
-
-- menos gerenciamento manual de inscricoes;
-- integracao natural com Observables;
-- templates mais declarativos.
-
-### 9. `signal()` no componente raiz
-
-O projeto ja inclui uso de `signal()` no componente principal.
-
-Mesmo que ainda de forma simples, isso mostra alinhamento com a direcao moderna do Angular para gerenciamento de estado local e reatividade mais previsivel.
-
-### 10. Diretivas standalone personalizadas
-
-Ha uma diretiva standalone chamada `PreventBlurDirective`, usada para ajustar o comportamento de interacao em elementos especificos da UI.
-
-Isso demonstra um ponto importante do Angular moderno: criar blocos reutilizaveis e isolados sem depender de modulo compartilhado.
-
-### 11. Pipes standalone do Angular
-
-A apresentacao dos dados usa pipes nativos importados diretamente nos componentes:
-
-- `CurrencyPipe`
-- `DatePipe`
-- `AsyncPipe`
-
-Isso combina bem com a arquitetura standalone e mantem cada componente declarando apenas o que realmente usa.
-
-### 12. Inputs obrigatorios com `@Input({ required: true })`
-
-Os componentes de item, como pessoa e despesa, usam inputs marcados como obrigatorios.
-
-Esse recurso melhora a seguranca da composicao dos componentes e ajuda a evitar erros de integracao entre pai e filho.
+- reorganizacao do header para telas menores;
+- adaptacao dos botoes principais para mobile;
+- dialogs com largura fluida para evitar cortes em viewports estreitas;
+- relatorio de rateio com resumo no topo e listagem por pessoa;
+- destaque visual para:
+  - `DEVE` em vermelho;
+  - `RECEBE` em verde;
+  - saldo positivo em verde;
+  - saldo negativo em vermelho;
+- ordenacao alfabetica das pessoas no resultado final.
 
 ## Regras de negocio ja implementadas
 
-Algumas regras importantes do dominio ja aparecem no codigo:
+O projeto ja contempla varias regras importantes:
 
-- o nome da pessoa nao pode ser vazio;
+- nome da pessoa nao pode ser vazio;
 - nao e permitido cadastrar duas pessoas com o mesmo nome;
 - a despesa precisa ter descricao;
 - o valor da despesa deve ser maior que zero;
 - cada despesa precisa estar vinculada a uma pessoa;
 - nao e permitido abrir o cadastro de despesa sem haver pessoas cadastradas;
-- ao remover uma pessoa, as despesas associadas tambem sao removidas.
-
-Essas regras ja dao uma base consistente para a futura etapa de calculo do rateio final.
+- ao remover uma pessoa, as despesas associadas tambem sao removidas;
+- o resultado do rateio e calculado apenas quando existem pessoas e despesas cadastradas.
 
 ## Estrutura do projeto
 
@@ -218,11 +163,9 @@ Organizacao principal em `src/app`:
 - `header/`: cabecalho da aplicacao;
 - `pessoas/`: cadastro, listagem e remocao de participantes;
 - `despesas/`: cadastro, listagem e remocao de despesas;
-- `rateio/`: area reservada para a abertura do calculo;
-- `resultado-rateio/`: estrutura inicial para exibicao do resultado final;
+- `rateio/`: servico, modelos e testes da logica de calculo;
+- `resultado-rateio/`: componente visual do relatorio final;
 - `shared/`: dialogs e diretivas reutilizaveis.
-
-Essa divisao esta coerente com uma arquitetura por feature, o que facilita a manutencao e a evolucao incremental do sistema.
 
 ## Persistencia local
 
@@ -233,25 +176,32 @@ Chaves utilizadas:
 - `pessoas`
 - `despesas`
 
-Isso e muito util nesta fase do projeto porque:
+Isso permite testar o sistema rapidamente sem depender de backend e preserva os dados entre recarregamentos da pagina.
 
-- simplifica o desenvolvimento;
-- elimina a dependencia de backend;
-- permite testar fluxos reais de uso rapidamente;
-- preserva os dados entre recarregamentos da pagina.
-
-## Internacionalizacao e localidade
+## Localidade
 
 O projeto foi preparado para o contexto brasileiro:
 
 - locale `pt-BR`;
 - formatacao monetaria em real;
 - datas exibidas no padrao local;
-- textos da interface em portugues.
+- interface em portugues.
 
-Esse cuidado e especialmente importante para um sistema financeiro, ainda que simples.
+## Testes
 
-## Como executar o projeto
+A regra de calculo do rateio possui testes automatizados em:
+
+- `src/app/rateio/rateio.service.spec.ts`
+
+Atualmente existem cenarios baseados em exemplos reais previamente validados na versao Java do algoritmo.
+
+Para executar os testes:
+
+```bash
+npm.cmd test -- --watch=false --include=src/app/rateio/rateio.service.spec.ts
+```
+
+## Como executar o projeto localmente
 
 Instale as dependencias:
 
@@ -276,29 +226,28 @@ http://localhost:4200
 - `npm start`: inicia o servidor de desenvolvimento com `ng serve`;
 - `npm run build`: gera o build de producao;
 - `npm run watch`: gera build em modo desenvolvimento com watch;
-- `npm test`: executa os testes unitarios configurados no projeto.
+- `npm test`: executa os testes configurados no projeto.
 
 ## Pontos de evolucao
 
-Como o sistema ainda esta em andamento, os proximos passos naturais sao:
+Embora a feature principal de rateio ja esteja funcional, ainda existem caminhos interessantes para evolucao:
 
-- implementar a logica completa do calculo de rateio;
-- mostrar quem deve pagar e quem deve receber;
-- consolidar saldos individuais;
-- criar resumo final com total gasto, media por pessoa e diferencas;
-- ampliar cobertura de testes;
-- adicionar rotas para separar melhor os fluxos;
-- considerar persistencia remota no futuro, se fizer sentido.
+- ampliar a cobertura de testes;
+- adicionar mais cenarios de validacao do algoritmo;
+- melhorar ainda mais a apresentacao visual do relatorio;
+- considerar persistencia remota no futuro;
+- separar fluxos com roteamento, se fizer sentido para a evolucao do app.
 
 ## Valor tecnico do projeto
 
-Mesmo sendo um sistema pequeno e ainda em construcao, este projeto ja serve como um bom exemplo de Angular moderno aplicado a um problema real de negocio:
+Mesmo sendo um sistema pequeno, o projeto reune varios aspectos relevantes de engenharia de software aplicada:
 
-- arquitetura standalone;
-- formularios reativos;
-- composicao com Angular Material;
-- fluxo reativo com RxJS;
-- templates com nova sintaxe;
-- preparacao para crescimento sem excesso de complexidade inicial.
+- modelagem de regra de negocio;
+- port de algoritmo de Java para TypeScript;
+- arquitetura por feature;
+- responsividade;
+- integracao com Angular Material;
+- testes automatizados;
+- preocupacao com legibilidade do resultado para o usuario final.
 
-Em outras palavras, e um projeto enxuto, atual e com uma base muito boa para continuar evoluindo.
+Em outras palavras, e um projeto enxuto, atual e com um problema de negocio real muito claro.
