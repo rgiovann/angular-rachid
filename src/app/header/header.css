@@ -1,62 +1,119 @@
-/* toolbar centralizada */
 mat-toolbar.header {
-  width: min(750px, 90%);
+  display: block;
+  height: auto;
+  width: min(750px, calc(100% - 2rem));
   margin: 0 auto;
+  box-sizing: border-box;
 
   min-height: 160px;
   padding: 1.5rem;
 
   border-radius: 12px;
   background: linear-gradient(to right, #00bcd4, #ff9800);
-
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
 }
 
-/* layout principal */
 .header-inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
-
+  gap: 1.5rem;
   width: 100%;
 }
 
-/* 🔥 mantém o centro realmente centralizado */
-.side {
-  width: 140px; /* mesma largura aproximada dos botões */
-}
-
-/* conteúdo central */
 .header-content {
+  flex: 1;
+  min-width: 0;
+
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
 }
 
-/* ações à direita */
 .header-actions {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  flex-shrink: 0;
 }
 
-/* logo */
 .logo {
+  display: block;
+  margin: 0 auto;
   width: 84px;
   height: 84px;
   object-fit: contain;
 }
 
-/* texto */
 .text h1 {
   margin: 0;
   font-size: 1.6rem;
   font-weight: 700;
+  color: #333333;
 }
 
 .text p {
-  margin: 0;
+  margin: 0.25rem 0 0;
   font-size: 1.3rem;
   opacity: 0.95;
+  line-height: 1.2;
+}
+
+@media (max-width: 700px) {
+  mat-toolbar.header {
+    width: min(100%, calc(100% - 1rem));
+    min-height: auto;
+    padding: 1.25rem 1rem;
+  }
+
+  .header-inner {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 1rem;
+  }
+
+  .header-content {
+    order: 1;
+  }
+
+  .header-actions {
+    order: 2;
+    width: 100%;
+    align-items: center;
+  }
+
+  .logo {
+    width: 72px;
+    height: 72px;
+  }
+
+  .text h1 {
+    font-size: 1.9rem;
+  }
+
+  .text p {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  mat-toolbar.header {
+    padding: 1rem 0.875rem;
+    border-radius: 10px;
+  }
+
+  .logo {
+    width: 64px;
+    height: 64px;
+  }
+
+  .text h1 {
+    font-size: 1.75rem;
+  }
+
+  .text p {
+    font-size: 0.95rem;
+  }
 }

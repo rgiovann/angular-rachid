@@ -5,11 +5,6 @@
 
   <mat-card-content>
 
-    <!-- HEADER DA "TABELA" -->
-    <div class="table-header">
-      Nome
-    </div>
-
     <div class="table-body">
       @for (pessoa of pessoas$ | async; track pessoa.id) {
       <app-pessoa [pessoa]="pessoa" (remover)="removerPessoa($event)">

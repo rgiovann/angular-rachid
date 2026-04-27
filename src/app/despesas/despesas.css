@@ -13,7 +13,7 @@ mat-card {
 /* Header (título "Pessoas") */
 mat-card-header {
   background: linear-gradient(to right, #00bcd4, #ff9800);
-  color: white;
+  color: #333333;
   padding: 1rem 1.25rem;
 }
 
