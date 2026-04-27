@@ -1,0 +1,73 @@
+{
+  "configVersion": 1,
+  "timestamp": 1777326968979,
+  "index": "/angular-rachid/index.html",
+  "assetGroups": [
+    {
+      "name": "app",
+      "installMode": "prefetch",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "/angular-rachid/apple-touch-icon.png",
+        "/angular-rachid/favicon-32x32.png",
+        "/angular-rachid/favicon.ico",
+        "/angular-rachid/index.html",
+        "/angular-rachid/main-FEDLBBYT.js",
+        "/angular-rachid/manifest.webmanifest",
+        "/angular-rachid/styles-IE544RIQ.css"
+      ],
+      "patterns": []
+    },
+    {
+      "name": "assets",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "/angular-rachid/assets/rachid.png",
+        "/angular-rachid/icon-192.png",
+        "/angular-rachid/icon-512.png",
+        "/angular-rachid/rachid.png"
+      ],
+      "patterns": []
+    }
+  ],
+  "dataGroups": [],
+  "hashTable": {
+    "/angular-rachid/apple-touch-icon.png": "5de5b8af00e1fc0bf1daf43a932dce30c43bb495",
+    "/angular-rachid/assets/rachid.png": "1bdeb80c816db83fb8bc4ca916e1f0a7c32c22cd",
+    "/angular-rachid/favicon-32x32.png": "5ef348f884b487ef0881ca9010cbc3aa4aead9f5",
+    "/angular-rachid/favicon.ico": "9c39f434fe1261f68c5e3eefdf734630d99c5670",
+    "/angular-rachid/icon-192.png": "a0d394e45cce01e0136fc396a8743903647de6ca",
+    "/angular-rachid/icon-512.png": "cb6783c67942c7b44c5d8477ea69da3253c6079b",
+    "/angular-rachid/index.html": "2d044bf964ee1e35118b3523386ea434b607f7bb",
+    "/angular-rachid/main-FEDLBBYT.js": "3ee9f66b1d9e5eeb98b8adf4395d10344dabf8cd",
+    "/angular-rachid/manifest.webmanifest": "6089cd7d1c93231d1db6b99d046669fb1b15aadd",
+    "/angular-rachid/rachid.png": "1bdeb80c816db83fb8bc4ca916e1f0a7c32c22cd",
+    "/angular-rachid/styles-IE544RIQ.css": "bfd21aaa08a2fd85ea68e8d0a5fe263b4ca281c7"
+  },
+  "navigationUrls": [
+    {
+      "positive": true,
+      "regex": "^\\/.*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*\\.[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*\\/.*$"
+    }
+  ],
+  "navigationRequestStrategy": "performance"
+}
