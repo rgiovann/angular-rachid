@@ -1,253 +1,253 @@
 # Rachid
 
-Aplicacao web em Angular para calcular quanto cada pessoa deve pagar ou receber em um rateio entre amigos.
+A web application built with Angular to calculate how much each person owes or should receive in a cost-sharing split among friends.
 
-O problema que o sistema resolve e simples de entender, mas muito comum na vida real: varias pessoas participam de uma viagem, encontro ou evento, os pagamentos sao feitos por pessoas diferentes, e no final o valor total precisa ser dividido igualmente entre todos.
+The problem the system solves is simple to understand but very common in real life: several people take part in a trip, gathering, or event, payments are made by different people, and at the end the total amount needs to be divided equally among everyone.
 
-O objetivo do app e registrar essas informacoes, consolidar os gastos e mostrar com clareza:
+The goal of the app is to register this information, consolidate the expenses, and clearly show:
 
-- quanto foi gasto ao todo;
-- quanto cada pessoa deveria pagar;
-- quem ficou com saldo positivo ou negativo;
-- quem deve pagar para quem.
+- how much was spent in total;
+- how much each person should pay;
+- who has a positive or negative balance;
+- who owes whom.
 
 ## Demo
 
-A aplicacao publicada pode ser acessada em:
+The published application can be accessed at:
 
 - [GitHub Pages - Rachid](https://rgiovann.github.io/angular-rachid/)
 
-## Status atual
+## Current status
 
-Hoje o projeto ja entrega um fluxo funcional de ponta a ponta:
+The project already delivers a fully functional end-to-end flow:
 
-- cadastro de pessoas;
-- cadastro de despesas com descricao, data, valor e responsavel;
-- remocao de pessoas e despesas;
-- exclusao em cascata das despesas quando uma pessoa e removida;
-- persistencia local com `localStorage`;
-- validacoes basicas de formulario;
-- dialogs de confirmacao e aviso;
-- calculo completo do rateio;
-- exibicao do resultado consolidado em dialog dedicado;
-- suporte visual refinado para telas desktop e mobile;
-- testes automatizados para a regra principal do algoritmo.
+- registration of people;
+- registration of expenses with description, date, amount, and responsible person;
+- removal of people and expenses;
+- cascade deletion of expenses when a person is removed;
+- local persistence with `localStorage`;
+- basic form validations;
+- confirmation and warning dialogs;
+- complete split calculation;
+- display of the consolidated result in a dedicated dialog;
+- refined visual support for desktop and mobile screens;
+- automated tests for the main algorithm rule.
 
-## Exemplo de uso
+## Usage example
 
-Considere 3 pessoas:
+Consider 3 people:
 
 - Antonio
 - Jose
 - Mario
 
-Pagamentos realizados:
+Payments made:
 
-- Antonio pagou `R$ 170,00`
-- Jose pagou `R$ 75,00`
-- Jose pagou `R$ 25,00`
+- Antonio paid `R$ 170.00`
+- Jose paid `R$ 75.00`
+- Jose paid `R$ 25.00`
 
-Total gasto:
+Total spent:
 
-- `R$ 270,00`
+- `R$ 270.00`
 
-Valor por pessoa:
+Amount per person:
 
-- `R$ 90,00`
+- `R$ 90.00`
 
-Resultado esperado:
+Expected result:
 
-- Jose deve `R$ 23,33` para Antonio
-- Mario deve `R$ 56,67` para Antonio
-- Mario deve `R$ 33,33` para Jose
+- Jose owes `R$ 23.33` to Antonio
+- Mario owes `R$ 56.67` to Antonio
+- Mario owes `R$ 33.33` to Jose
 
-Esse e um dos cenarios usados para validar o algoritmo no projeto.
+This is one of the scenarios used to validate the algorithm in the project.
 
-## Como o resultado e apresentado
+## How the result is presented
 
-Ao clicar no botao `Rateio`, o sistema:
+When the `Split` button is clicked, the system:
 
-1. consolida todas as despesas cadastradas;
-2. calcula a cota igual por participante;
-3. identifica o saldo individual de cada pessoa;
-4. reduz os cruzamentos de debito/credito para chegar nas transferencias finais;
-5. exibe um relatorio visual com:
-- total das despesas;
-- valor por pessoa;
-- saldo de cada participante;
-- linhas do tipo `DEVE ... para ...` e `RECEBE ... de ...`;
-- indicacao de `Esta quite` quando nao houver movimentacoes pendentes.
+1. consolidates all registered expenses;
+2. calculates the equal share per participant;
+3. identifies each person's individual balance;
+4. reduces debit/credit crossings to arrive at the final transfers;
+5. displays a visual report with:
+- total expenses;
+- amount per person;
+- each participant's balance;
+- lines of the type `OWES ... to ...` and `RECEIVES ... from ...`;
+- indication of `All settled` when there are no pending transactions.
 
-## Arquitetura da feature de rateio
+## Split feature architecture
 
-O projeto segue uma separacao simples e saudavel entre regra de negocio e interface:
+The project follows a simple and clean separation between business logic and interface:
 
 - `src/app/rateio/rateio.service.ts`
-  Calcula o rateio com base nas pessoas e despesas cadastradas.
+  Calculates the split based on registered people and expenses.
 
 - `src/app/rateio/rateio.model.ts`
-  Define os contratos de dados usados como saida do calculo.
+  Defines the data contracts used as output from the calculation.
 
 - `src/app/resultado-rateio/`
-  Contem o componente responsavel por transformar o resultado em um relatorio visual para o usuario.
+  Contains the component responsible for transforming the result into a visual report for the user.
 
 - `src/app/app.ts`
-  Orquestra o clique do botao `Rateio`, chama o servico e abre o dialog de resultado.
+  Orchestrates the `Split` button click, calls the service, and opens the result dialog.
 
-Essa estrutura evita misturar calculo financeiro com renderizacao e facilita manutencao, testes e evolucao futura.
+This structure avoids mixing financial calculation with rendering and makes maintenance, testing, and future evolution easier.
 
-## Logica de calculo
+## Calculation logic
 
-O algoritmo implementado em TypeScript foi portado a partir de uma versao previamente validada em Java.
+The algorithm implemented in TypeScript was ported from a previously validated Java version.
 
-De forma resumida, ele funciona assim:
+In short, it works as follows:
 
-1. soma todos os pagamentos feitos;
-2. calcula quanto cada pessoa deveria pagar igualmente;
-3. registra, para cada despesa, quanto cada uma das outras pessoas deve ao pagador;
-4. consolida relacoes reciprocas entre pares de pessoas;
-5. elimina residuos numericos irrelevantes com tolerancia para ponto flutuante;
-6. devolve:
-- total gasto;
-- valor por pessoa;
-- saldos individuais;
-- transferencias finais entre devedores e credores.
+1. sums all payments made;
+2. calculates how much each person should equally pay;
+3. records, for each expense, how much each of the other people owes the payer;
+4. consolidates reciprocal relationships between pairs of people;
+5. eliminates irrelevant numerical residues with floating-point tolerance;
+6. returns:
+- total spent;
+- amount per person;
+- individual balances;
+- final transfers between debtors and creditors.
 
-## Angular moderno utilizado no projeto
+## Modern Angular used in the project
 
-Este projeto aplica varias praticas atuais do ecossistema Angular:
+This project applies several current practices from the Angular ecosystem:
 
 - standalone components;
 - `bootstrapApplication`;
-- `signal()` no componente raiz;
-- templates com `@for` e `@if`;
-- formularios reativos tipados;
-- integracao com Angular Material;
+- `signal()` in the root component;
+- templates with `@for` and `@if`;
+- typed reactive forms;
+- integration with Angular Material;
 - `AsyncPipe`;
-- pipes importados diretamente nos componentes;
-- diretiva standalone customizada;
-- uso de RxJS com `BehaviorSubject`, `Observable`, `combineLatest` e `map`.
+- pipes imported directly into components;
+- custom standalone directive;
+- use of RxJS with `BehaviorSubject`, `Observable`, `combineLatest`, and `map`.
 
-## Recursos de UI/UX implementados
+## UI/UX features implemented
 
-Ao longo da construcao, a interface passou por refinamentos importantes:
+Throughout the build, the interface went through important refinements:
 
-- reorganizacao do header para telas menores;
-- adaptacao dos botoes principais para mobile;
-- dialogs com largura fluida para evitar cortes em viewports estreitas;
-- relatorio de rateio com resumo no topo e listagem por pessoa;
-- destaque visual para:
-  - `DEVE` em vermelho;
-  - `RECEBE` em verde;
-  - saldo positivo em verde;
-  - saldo negativo em vermelho;
-- ordenacao alfabetica das pessoas no resultado final.
+- header reorganization for smaller screens;
+- adaptation of main buttons for mobile;
+- dialogs with fluid width to avoid clipping on narrow viewports;
+- split report with a summary at the top and a per-person listing;
+- visual highlights for:
+  - `OWES` in red;
+  - `RECEIVES` in green;
+  - positive balance in green;
+  - negative balance in red;
+- alphabetical ordering of people in the final result.
 
-## Regras de negocio ja implementadas
+## Business rules already implemented
 
-O projeto ja contempla varias regras importantes:
+The project already covers several important rules:
 
-- nome da pessoa nao pode ser vazio;
-- nao e permitido cadastrar duas pessoas com o mesmo nome;
-- a despesa precisa ter descricao;
-- o valor da despesa deve ser maior que zero;
-- cada despesa precisa estar vinculada a uma pessoa;
-- nao e permitido abrir o cadastro de despesa sem haver pessoas cadastradas;
-- ao remover uma pessoa, as despesas associadas tambem sao removidas;
-- o resultado do rateio e calculado apenas quando existem pessoas e despesas cadastradas.
+- a person's name cannot be empty;
+- registering two people with the same name is not allowed;
+- an expense must have a description;
+- the expense amount must be greater than zero;
+- each expense must be linked to a person;
+- opening the expense registration without any registered people is not allowed;
+- when a person is removed, their associated expenses are also removed;
+- the split result is calculated only when there are both people and expenses registered.
 
-## Estrutura do projeto
+## Project structure
 
-Organizacao principal em `src/app`:
+Main organization under `src/app`:
 
-- `header/`: cabecalho da aplicacao;
-- `pessoas/`: cadastro, listagem e remocao de participantes;
-- `despesas/`: cadastro, listagem e remocao de despesas;
-- `rateio/`: servico, modelos e testes da logica de calculo;
-- `resultado-rateio/`: componente visual do relatorio final;
-- `shared/`: dialogs e diretivas reutilizaveis.
+- `header/`: application header;
+- `pessoas/`: registration, listing, and removal of participants;
+- `despesas/`: registration, listing, and removal of expenses;
+- `rateio/`: service, models, and tests for the calculation logic;
+- `resultado-rateio/`: visual component for the final report;
+- `shared/`: reusable dialogs and directives.
 
-## Persistencia local
+## Local persistence
 
-Atualmente os dados sao persistidos no navegador com `localStorage`.
+Data is currently persisted in the browser using `localStorage`.
 
-Chaves utilizadas:
+Keys used:
 
 - `pessoas`
 - `despesas`
 
-Isso permite testar o sistema rapidamente sem depender de backend e preserva os dados entre recarregamentos da pagina.
+This allows quick testing without depending on a backend and preserves data between page reloads.
 
-## Localidade
+## Locale
 
-O projeto foi preparado para o contexto brasileiro:
+The project was prepared for the Brazilian context:
 
 - locale `pt-BR`;
-- formatacao monetaria em real;
-- datas exibidas no padrao local;
-- interface em portugues.
+- monetary formatting in Brazilian Real;
+- dates displayed in the local standard;
+- interface in Portuguese.
 
-## Testes
+## Tests
 
-A regra de calculo do rateio possui testes automatizados em:
+The split calculation rule has automated tests in:
 
 - `src/app/rateio/rateio.service.spec.ts`
 
-Atualmente existem cenarios baseados em exemplos reais previamente validados na versao Java do algoritmo.
+Currently there are scenarios based on real examples previously validated in the Java version of the algorithm.
 
-Para executar os testes:
+To run the tests:
 
 ```bash
 npm.cmd test -- --watch=false --include=src/app/rateio/rateio.service.spec.ts
 ```
 
-## Como executar o projeto localmente
+## How to run the project locally
 
-Instale as dependencias:
+Install the dependencies:
 
 ```bash
 npm install
 ```
 
-Inicie o servidor de desenvolvimento:
+Start the development server:
 
 ```bash
 npm start
 ```
 
-Depois acesse:
+Then access:
 
 ```text
 http://localhost:4200
 ```
 
-## Scripts disponiveis
+## Available scripts
 
-- `npm start`: inicia o servidor de desenvolvimento com `ng serve`;
-- `npm run build`: gera o build de producao;
-- `npm run watch`: gera build em modo desenvolvimento com watch;
-- `npm test`: executa os testes configurados no projeto.
+- `npm start`: starts the development server with `ng serve`;
+- `npm run build`: generates the production build;
+- `npm run watch`: generates the build in development mode with watch;
+- `npm test`: runs the tests configured in the project.
 
-## Pontos de evolucao
+## Evolution points
 
-Embora a feature principal de rateio ja esteja funcional, ainda existem caminhos interessantes para evolucao:
+Although the main split feature is already functional, there are still interesting paths for evolution:
 
-- ampliar a cobertura de testes;
-- adicionar mais cenarios de validacao do algoritmo;
-- melhorar ainda mais a apresentacao visual do relatorio;
-- considerar persistencia remota no futuro;
-- separar fluxos com roteamento, se fizer sentido para a evolucao do app.
+- expand test coverage;
+- add more algorithm validation scenarios;
+- further improve the visual presentation of the report;
+- consider remote persistence in the future;
+- separate flows with routing, if it makes sense for the app's evolution.
 
-## Valor tecnico do projeto
+## Technical value of the project
 
-Mesmo sendo um sistema pequeno, o projeto reune varios aspectos relevantes de engenharia de software aplicada:
+Even though it is a small system, the project brings together several relevant aspects of applied software engineering:
 
-- modelagem de regra de negocio;
-- port de algoritmo de Java para TypeScript;
-- arquitetura por feature;
-- responsividade;
-- integracao com Angular Material;
-- testes automatizados;
-- preocupacao com legibilidade do resultado para o usuario final.
+- business rule modeling;
+- algorithm porting from Java to TypeScript;
+- feature-based architecture;
+- responsiveness;
+- integration with Angular Material;
+- automated tests;
+- concern for the readability of the final result for the user.
 
-Em outras palavras, e um projeto enxuto, atual e com um problema de negocio real muito claro.
+In other words, it is a lean, up-to-date project with a very clear real-world business problem.
